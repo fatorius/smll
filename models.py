@@ -28,5 +28,9 @@ class Sequential:
         self.layers.append(new_layer)
 
     def run(self, value):
-        pass
+        current_value = value
+        for layer in self.layers:
+            current_value = layer.feedfoward(current_value)
+
+        return current_value
 

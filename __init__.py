@@ -19,6 +19,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # email: contato@hugosouza.com
 
-import smll.layers
-import smll.models
+import layers
+import models
 

@@ -20,7 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # email: contato@hugosouza.com
 
 from random import randint
-import smll.activations as activations
+import activations as activations
 
 
 def generate_weight():
@@ -38,19 +38,19 @@ def flatten(vector):
 
 
 def get_activation_function(activation):
-        if activation == "relu":
-            return activations.relu
-        elif activation == "sigmoid":
-            return activations.sigmoid
-        elif activation == "softmax":
-            return activations.softmax
-        else:
-            # exceptions handle 
-            pass
+    if activation == "relu":
+        return activations.relu
+    elif activation == "sigmoid":
+        return activations.sigmoid
+    elif activation == "softmax":
+        return activations.softmax
+    else:
+        # todo exceptions handle
+        pass
 
 
 class Neuron:
-    def __init__(self, shape, activation):
+    def __init__(self, shape):
         self.b = []
         self.w = []
 
@@ -58,37 +58,29 @@ class Neuron:
             self.b.append(generate_weight())
             self.w.append(generate_weight())
 
-        self.activate = get_activation_function(activation)
-
     def weight(self, values):
         for pos, value in enumerate(values):
-            value = (value * self.w[pos]) + self.b[pos]
+            values[pos] = (value * self.w[pos]) + self.b[pos]
 
-        return self.activate(values)
+        return values
 
 
-class DenseLayer:
+class Dense:
     def __init__(self, neurons, input_shape, activation):
         self.input_shape = input_shape
         self.neurons_number = neurons
         self.neurons = []
-        self.activation = activation
+        self.activation = get_activation_function(activation)
         self.value = []
 
         for a in range(self.neurons_number):
-            self.neurons.append(Neuron(self.input_shape, self.activation))
+            self.neurons.append(Neuron(self.input_shape))
 
     def feedfoward(self, input_data):
-        #TODO test if input shape is valid
+        # TODO test if input shape is valid
         out = []
         for neuron in self.neurons:
             out.append(sum(neuron.weight(input_data)))
-        self.value = out
+        self.value = self.activation(out)
 
-    def output(self, input_data):
-        #TODO test if input shape is valid
-        out = []
-        for neuron in self.neurons:
-            out.append(neuron.weight(input_data))
-        self.value = out
-            
+        return self.value
