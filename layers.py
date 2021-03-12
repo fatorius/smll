@@ -1,7 +1,7 @@
 # in this file there are all of the layer classes
 
 """
-Copyright (C) <year>  <name of author>
+Copyright (C) 2021 HugoSouza
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # email: contato@hugosouza.com
 
 from random import randint
+import smll.activations as activations
 
 
 def generate_weight():
@@ -36,30 +37,58 @@ def flatten(vector):
     return out
 
 
+def get_activation_function(activation):
+        if activation == "relu":
+            return activations.relu
+        elif activation == "sigmoid":
+            return activations.sigmoid
+        elif activation == "softmax":
+            return activations.softmax
+        else:
+            # exceptions handle 
+            pass
+
+
 class Neuron:
-    def __init__(self):
-        self.b = generate_weight()
-        self.w = generate_weight()
+    def __init__(self, shape, activation):
+        self.b = []
+        self.w = []
 
+        for a in range(flatten(shape)):
+            self.b.append(generate_weight())
+            self.w.append(generate_weight())
 
-class InputLayer:
-    def __init__(self, input_shape, activation):
-        self.input_shape = input_shape
-        self.neurons_number = flatten(self.input_shape)
-        self.neurons = []
-        self.activation = activation
+        self.activate = get_activation_function(activation)
 
-        for a in range(self.neurons_number):
-            self.neurons.append(Neuron)
+    def weight(self, values):
+        for pos, value in enumerate(values):
+            value = (value * self.w[pos]) + self.b[pos]
 
-    def feedfoward(self, input_data):
-        for pos, data in enumerate(input_data):
-            #...
+        return self.activate(values)
+
 
 class DenseLayer:
-    def __init__(self, neurons, activiation):
+    def __init__(self, neurons, input_shape, activation):
+        self.input_shape = input_shape
         self.neurons_number = neurons
         self.neurons = []
+        self.activation = activation
+        self.value = []
 
         for a in range(self.neurons_number):
-            self.neurons.append(Neuron())
+            self.neurons.append(Neuron(self.input_shape, self.activation))
+
+    def feedfoward(self, input_data):
+        #TODO test if input shape is valid
+        out = []
+        for neuron in self.neurons:
+            out.append(sum(neuron.weight(input_data)))
+        self.value = out
+
+    def output(self, input_data):
+        #TODO test if input shape is valid
+        out = []
+        for neuron in self.neurons:
+            out.append(neuron.weight(input_data))
+        self.value = out
+            
