@@ -1,4 +1,4 @@
-# this is a simple experiment to create a machine learning library
+# in this file there are all of the layer classes
 
 """
 Copyright (C) <year>  <name of author>
@@ -22,8 +22,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from random import randint
 
 
-# some math related functions
-
 def generate_weight():
     return randint(0, 1000)/1000
 
@@ -32,6 +30,9 @@ def flatten(vector):
     out = 1
     for dimension in vector:
         out *= dimension
+
+    if out == 0:
+        raise Exception("input shape inválida, um dos eixos está nulo.")
     return out
 
 
@@ -44,22 +45,21 @@ class Neuron:
 class InputLayer:
     def __init__(self, input_shape, activation):
         self.input_shape = input_shape
-        self.neuronsNumber = flatten(self.input_shape)
+        self.neurons_number = flatten(self.input_shape)
         self.neurons = []
+        self.activation = activation
 
-        for a in range(self.neuronsNumber):
+        for a in range(self.neurons_number):
             self.neurons.append(Neuron)
 
+    def feedfoward(self, input_data):
+        for pos, data in enumerate(input_data):
+            #...
 
 class DenseLayer:
     def __init__(self, neurons, activiation):
-        self.neuronsNumber = neurons
+        self.neurons_number = neurons
         self.neurons = []
 
-        for a in range(self.neuronsNumber):
+        for a in range(self.neurons_number):
             self.neurons.append(Neuron())
-
-
-class Model:
-    def __init__(self, layers):
-        self.layers = layers
