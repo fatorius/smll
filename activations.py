@@ -21,6 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import math
 
+
 def sigmoid(input_value):
     out = []
     
@@ -34,7 +35,12 @@ def relu(input_value):
     out = []
     
     for value in input_value:
-        out.append(max(0, value))
+        if value > 1:
+            out.append(1)
+        elif value < -1:
+            out.append(-1)
+        else:
+            out.append(value)
     
     return out
 

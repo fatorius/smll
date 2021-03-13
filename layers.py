@@ -24,7 +24,7 @@ import activations as activations
 
 
 def generate_weight():
-    return randint(0, 1000)/1000
+    return randint(-1000, 1000)/1000
 
 
 def flatten(vector):
@@ -58,6 +58,9 @@ class Neuron:
             self.b.append(generate_weight())
             self.w.append(generate_weight())
 
+        self.w_num = len(self.w)
+        self.b_num = len(self.b)
+
     def weight(self, values):
         for pos, value in enumerate(values):
             values[pos] = (value * self.w[pos]) + self.b[pos]
@@ -75,6 +78,8 @@ class Dense:
 
         for a in range(self.neurons_number):
             self.neurons.append(Neuron(self.input_shape))
+
+        self.neurons_num = len(self.neurons)
 
     def feedfoward(self, input_data):
         # TODO test if input shape is valid
